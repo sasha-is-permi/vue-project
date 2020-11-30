@@ -1,6 +1,6 @@
 module.exports = {
+  publicPath:'/vue-project/', 
   css: {
-    publicPath:'/vue-project/', 
     modules: true
   }
 }

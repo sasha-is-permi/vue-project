@@ -54,9 +54,9 @@ export default {
 
 $color-header : #42b983;
 $margin-10: 10px;
-$margin-50: 50px;
+$margin-50: 50px; 
 
-.form-header {
+.form-header { 
 color: $color-header;
 text-align:center;
 }

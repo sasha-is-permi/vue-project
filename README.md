@@ -1,4 +1,11 @@
+# Проект vue:
+# https://github.com/sasha-is-permi/vue-project
+
+# Проект на git-pages:
+# https://sasha-is-permi.github.io/vue-project/
+
 # vue-project2
+
 
 ## Project setup
 ```

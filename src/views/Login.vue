@@ -1,15 +1,32 @@
+<!-- Страница авторизации полизователя.
+     Валидация формы осуществляется с помощью 
+     пакета validate
+     ( установка: npm install vuelidate --save-- ) -->
+
 <template>
 <div> 
   <h2 class="form-header"> Введите ваши данные для авторизации: </h2>
   
 
 
- <form name="form" action="#" method="post" enctype="multipart/form-data">
+ <v-form 
+ @submit.prevent="onSubmit"
+ name="form"
+ action="#"
+ method="post"
+ enctype="multipart/form-data"
+    >
         <fieldset>
             <div class=form-wrapper>
              <div class="form-line">
                 <label for="login">Ваше имя:</label>
-                <input id="login" type="text" name="login" />
+                <input 
+                id="login"
+                type="text"
+                name="login"
+                v-model="login"
+                :rules="loginRules"
+                 />
             </div>
             <div class="form-line">
                 <label for="email">Ваш email:</label>
@@ -27,9 +44,21 @@
         </fieldset>
         <div class="reset-submit">
             <input id="reset1" type="reset" value="Сбросить" />
-            <input id="submit1" type="submit" name="submit" value="Отправить" />
+            <!-- Валидация при нажатии кнопочки submit 
+            При нажатии на кнопку вызываем метод onSubmit()
+            Кнопка отключена пока валидация не прошла 
+            -->
+            <input
+            @click="onSubmit"
+            color="primary"
+            :disabled="$v.$invalid"
+             id="submit1" 
+             type="submit" 
+             name="submit" 
+             value="Отправить" 
+             />
         </div>
-    </form>
+    </v-form>
      </div> 
 
 
@@ -45,8 +74,29 @@
 <script>
 
 export default {
+      data() {
+        return {
+          login:'',
+          valid:false,
+          loginRules: [
+             v => !!v || 'Логин не введен',
+             v =>( (v.length >=3 && v.length <=15) ) || 'Логин должен содержать от 3 до 15 символов '
+          ]
 
-} 
+        }
+
+      },
+
+      methods: {
+onSubmit() {
+
+      
+    }
+}
+}
+
+
+
 
 </script>
 
@@ -62,7 +112,7 @@ text-align:center;
 }
 
 body{
-background-image: url(bg-01.jpg);
+//background-image: url(bg-01.jpg);
 background-size: 100%; 
 }
 

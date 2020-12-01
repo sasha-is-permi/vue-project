@@ -20,21 +20,52 @@
             <div class=form-wrapper>
              <div class="form-line">
                 <label for="login">Ваше имя:</label>
+           <!-- Вызов собственного валидатора  login при потере фокуса
+         (  @blur="$v.login.$touch()")
+         -->             
+               
                 <input 
                 id="login"
                 type="text"
                 name="login"
+                :class="{'is-invalid': $v.login.$error}"
+                @blur="$v.login.$touch()"
                 v-model="login"
-                :rules="loginRules"
                  />
             </div>
             <div class="form-line">
                 <label for="email">Ваш email:</label>
-                <input id="email" type="email" name="email" />
+         <!-- Вызов собственного валидатора  email при потере фокуса
+         (  @blur="$v.email.$touch()")
+         -->     
+          <input
+          type="email"
+          id="email"
+          :class="{'is-invalid': $v.email.$error}"
+          @blur="$v.email.$touch()"
+          v-model="email"
+          name="e-mail"
+        >
             </div>
+        <div class="invalid-feedback" v-if="!$v.email.required">Email field is required</div>
+        <div class="invalid-feedback" v-if="!$v.email.email">This field should be an email</div>
+        <div class="invalid-feedback" v-if="!$v.email.uniqEmail">This email is test e-mail</div> 
             <div class="form-line">
                 <label for="password">Ваш пароль:</label>
-                <input id="password" type="password" name="password" />
+                
+        <!-- Вызов собственного валидатора  password при потере фокуса
+         (  @blur="$v.password.$touch()" )
+         -->        
+
+                <input 
+                id="password" 
+                type="password"
+                name="password"
+                class="form-control"
+                :class="{'is-invalid': $v.password.$error}"
+                @blur="$v.password.$touch()"
+                v-model="password"
+                />
             </div>
             <div class="form-file" >
                 <label id="file1-label" for="file">Файл:</label>
@@ -61,42 +92,50 @@
     </v-form>
      </div> 
 
-
-
-    
-
-
-
+  
 
 
 </template>
 
 <script>
+// импортируем валидаторы стандартные, на их основе 
+// делаем собственные валидаторы в validations:
+import { required, email, minLength, maxLength } from 'vuelidate/lib/validators'
 
 export default {
-      data() {
-        return {
-          login:'',
-          valid:false,
-          loginRules: [
-             v => !!v || 'Логин не введен',
-             v =>( (v.length >=3 && v.length <=15) ) || 'Логин должен содержать от 3 до 15 символов '
-          ]
-
-        }
-
-      },
-
-      methods: {
-onSubmit() {
-
-      
+    data () {
+    return {
+      email: '',
+      password: '',
+      login:''
     }
+  },
+  methods: {
+    onSubmit () {
+      console.log('Email', this.email)
+      console.log('Password', this.password)
+    }
+  },
+  validations: {
+    email: {
+      required,
+      email,      
+      uniqEmail: function(newEmail) {
+        if (newEmail === '') return true
+        return newEmail !=='test@mail.ru'
+
+      }
+    },
+    password: {
+      minLength: minLength(8)
+    },
+    login: {
+      minLength: minLength(3),
+      maxLength: maxLength(15)
+    }
+  }
+
 }
-}
-
-
-
 
 </script>
 
@@ -112,7 +151,7 @@ text-align:center;
 }
 
 body{
-//background-image: url(bg-01.jpg);
+background-image: url(bg-01.jpg);
 background-size: 100%; 
 }
 
@@ -153,6 +192,16 @@ margin-right:$margin-10;
    margin-left: 20px; 
 }
 
+// При ошибочном e-mail-
+// выделить его цветом
+.is-invalid{
+    color: red;
+}
+
+// Сообщение об ошибочном e-mail
+.invalid-feedback{
+    color:darkgreen
+}
 
 </style>
 

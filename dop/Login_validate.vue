@@ -9,7 +9,7 @@
   
 
 
- <form 
+ <v-form 
  @submit.prevent="onSubmit"
  name="form"
  action="#"
@@ -19,18 +19,18 @@
         <fieldset>
             <div class=form-wrapper>
              <div class="form-line">
-                <label for="name">Ваше имя:</label>
-           <!-- Вызов собственного валидатора  name при потере фокуса
-         (  @blur="$v.name.$touch()")
+                <label for="login">Ваше имя:</label>
+           <!-- Вызов собственного валидатора  login при потере фокуса
+         (  @blur="$v.login.$touch()")
          -->             
                
                 <input 
-                id="name"
+                id="login"
                 type="text"
-                name="name"
-                :class="{'is-invalid': $v.name.$error}"
-                @blur="$v.name.$touch()"
-                v-model="name"
+                name="login"
+                :class="{'is-invalid': $v.login.$error}"
+                @blur="$v.login.$touch()"
+                v-model="login"
                  />
             </div>
             <div class="form-line">
@@ -80,6 +80,7 @@
             Кнопка отключена пока валидация не прошла 
             -->
             <input
+            @click="onSubmit"
             color="primary"
             :disabled="$v.$invalid"
              id="submit1" 
@@ -88,7 +89,7 @@
              value="Отправить" 
              />
         </div>
-    </form>
+    </v-form>
      </div> 
 
   
@@ -106,7 +107,7 @@ export default {
     return {
       email: '',
       password: '',
-      name:''
+      login:''
     }
   },
   methods: {
@@ -114,62 +115,10 @@ export default {
      // Добавление данных в локальное хранилище localStorage
      // В окне консоли- вкладка Applications (или Resources)
      // Там можно увидеть сохраненные данные через localStorage
-     
-     // Объект для дальнейшей записи в localStorage
-     // Авторизация идет по e-mail и password
-     let User= {
-     name: this.name,
-     password:this.password,
-     email:this.email
-     }
-
-    // существует ли email, который заводится из формы, в localStorage 
-    let emailExist   = false;
-    let passwordTrue = false;
-
-    // Перебор уже существующих значений в localStorage 
-    for(let i=0; i<localStorage.length; i++) {
- 
-    // Получаем по ключу записанный в localStorage объект
-    let userLocalStorage = localStorage.getItem ( localStorage.key(i) );
-    
-    console.log('User',User);
-
-    console.log('userLocalStorage',userLocalStorage); 
-     // Если уже существует такой пользователь в localStorage- 
-     // ставим флаг "не добавлять пользователя"
-     if (userLocalStorage.email === User.email) {
-        emailExist = true 
-     if (User.password === userLocalStorage.password)  {
-                   passwordTrue = true;
-          }       
-        
-        }
-
-    }     
-    
-        // Нового пользователя сохраняем localStorage
-    if (emailExist === false) {      
-     // Сохраняем введенный объект в формате JSON 
-     // Ключ уникальности в localStorage-  по  email 
-    localStorage.setItem(User.email,JSON.stringify(User))
-    alert('Объект сохранен в localStorage***')
+     localStorage.setItem("login", this.login);
+     localStorage.setItem("password", this.password);
+     localStorage.setItem("email", this.email);
     }
-      else {
-    // Если введен правильный e-mail, но не правильный пароль  
-    if ((emailExist) && (!passwordTrue)) {
-       alert('для пользователя был введен неправильный пароль!')
-    }
-    
-    // Если введен правильный e-mail, и правильный пароль  
-    if ((emailExist) && (passwordTrue)) {
-      alert('Переходим на главную станицу')
-      // Переход на главную страницу
-      // Передадим туда объект User
-    }
-           }
-
-  }
   },
   validations: {
     email: {
@@ -184,7 +133,7 @@ export default {
     password: {
       minLength: minLength(8)
     },
-    name: {
+    login: {
       minLength: minLength(3),
       maxLength: maxLength(15)
     }

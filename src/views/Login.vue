@@ -131,17 +131,25 @@ export default {
     for(let i=0; i<localStorage.length; i++) {
  
     // Получаем по ключу записанный в localStorage объект
-    let userLocalStorage = localStorage.getItem ( localStorage.key(i) );
+    let userLocalStorage0 = localStorage.getItem ( localStorage.key(i) );
     
+    
+
     console.log('User',User);
 
-    console.log('userLocalStorage',userLocalStorage); 
+    console.log('userLocalStorage0',userLocalStorage0); 
+
+    console.log('TypeofuserLocalStorage',typeof(userLocalStorage)); 
+
+    
+    let userLocalStorage = JSON.parse(userLocalStorage0); 
+
      // Если уже существует такой пользователь в localStorage- 
      // ставим флаг "не добавлять пользователя"
      if (userLocalStorage.email === User.email) {
-        emailExist = true 
+        emailExist = true; console.log("email true")
      if (User.password === userLocalStorage.password)  {
-                   passwordTrue = true;
+                   passwordTrue = true;  console.log("email true")
           }       
         
         }

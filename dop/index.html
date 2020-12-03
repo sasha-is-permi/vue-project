@@ -172,13 +172,157 @@ console.log('I am ' + age + 'years old'); // I am 25 years old
 Важно: строки, созданные с помощью обычных кавычек (' и ") не поддерживают интерполяцию.
  Для поддержки интерполяции следует использовать обратную кавычку ` (клавиша ё на клавиатуре):
 
+
     // Перебор уже существующих значений в localStorage 
+    // В localstorage могут находиться и не JSON-значения,
+    // которые при распарсивании вызовут ошибку
+     
+    // Поэтому мужно провести проверку:
+    function IsJsonString(str) {
+    try {
+        JSON.parse(str);
+    } catch (e) {
+        return false;
+    }
+    return true;
+}
+
     for(let i=0; i<localStorage.length; i++) {
                   let key = localStorage.key(i);
     alert(`${key}: ${localStorage.getItem(key)}`);
     }
 
+
+Работа с localStorage
+https://learn.javascript.ru/localstorage
     
+
+Метод onSubmit: 
+
+onSubmit () {
+     // Добавление данных в локальное хранилище localStorage
+     // В окне консоли- вкладка Applications (или Resources)
+     // Там можно увидеть сохраненные данные через localStorage
+     
+     // Объект для дальнейшей записи в localStorage
+     // Авторизация идет по e-mail и password
+     let User= {
+     name: this.name,
+     password:this.password,
+     email:this.email
+     }
+
+    // существует ли email, который заводится из формы, в localStorage 
+    let emailExist   = false;
+    let passwordTrue = false;
+
+    // Перебор уже существующих значений в localStorage 
+    for(let i=0; i<localStorage.length; i++) {
+ 
+    // Получаем по ключу записанный в localStorage объект
+    let userLocalStorage0 = localStorage.getItem ( localStorage.key(i) );
+    
+    
+
+    console.log('User',User);
+
+    console.log('userLocalStorage0',userLocalStorage0); 
+
+    console.log('TypeofuserLocalStorage0',typeof(userLocalStorage0)); 
+
+    let isJSON = true;
+
+   
+   try {
+     JSON.parse(userLocalStorage0);
+    } catch (e) {
+      console.log('строка не в формате JSON:',userLocalStorage0);
+      isJSON = false;
+    }  
+
+   // Если строка их хранища не в формате JSON- 
+   // переходим на начало цикла, пропускаем данное значение
+   if  (isJSON === false) continue;
+      
+      // А если в формате JSON- применяем функцию parse
+    let   userLocalStorage = JSON.parse(userLocalStorage0);
+   
+   // Если уже существует такой пользователь в localStorage- 
+     // ставим флаг "не добавлять пользователя"
+     if (userLocalStorage.email === User.email) {
+        emailExist = true; console.log("email true")
+     if (User.password === userLocalStorage.password)  {
+                   passwordTrue = true;  console.log("password true")
+          }       
+        
+        }
+
+    }     
+    
+        // Нового пользователя сохраняем localStorage
+    if (emailExist === false) {      
+     // Сохраняем введенный объект в формате JSON 
+     // Ключ уникальности в localStorage-  по  email 
+    localStorage.setItem(User.email,JSON.stringify(User))
+    alert('Объект сохранен в localStorage***')
+    }
+      else {
+    // Если введен правильный e-mail, но не правильный пароль  
+    if ((emailExist) && (!passwordTrue)) {
+       alert('для пользователя был введен неправильный пароль!')
+    }
+    
+    // Если введен правильный e-mail, и правильный пароль  
+    if ((emailExist) && (passwordTrue)) {
+      alert('Переходим на главную станицу')
+      // Переход на главную страницу
+      // Передадим туда объект User
+    }
+           }
+
+  }
+  },
+  validations: {
+    email: {
+      required,
+      email,      
+      uniqEmail: function(newEmail) {
+        if (newEmail === '') return true
+        return newEmail !=='test@mail.ru'
+
+      }
+    },
+    password: {
+      minLength: minLength(8)
+    },
+    name: {
+      minLength: minLength(3),
+      maxLength: maxLength(15)
+    }
+  }
+
+}
+
+
+Метод вызывается в шапке тега формы:
+ <form 
+ @submit.prevent="onSubmit"
+ name="form"
+ action="#"
+ method="post"
+ enctype="multipart/form-data"
+    >
+
+ prevent- без перезагрузки формы
+ (отменяется стандартное поведение формы)   
+
+ Можно было событие добавит на кнопочку submit, но в данном 
+ случае в заголовке формы событие отправки описанно. 
+
+
+ 
+
+
 -->
 
 <!DOCTYPE html>

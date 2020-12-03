@@ -139,17 +139,31 @@ export default {
 
     console.log('userLocalStorage0',userLocalStorage0); 
 
-    console.log('TypeofuserLocalStorage',typeof(userLocalStorage)); 
+    console.log('TypeofuserLocalStorage0',typeof(userLocalStorage0)); 
 
-    
-    let userLocalStorage = JSON.parse(userLocalStorage0); 
+    let isJSON = true;
 
-     // Если уже существует такой пользователь в localStorage- 
+   
+   try {
+     JSON.parse(userLocalStorage0);
+    } catch (e) {
+      console.log('строка не в формате JSON:',userLocalStorage0);
+      isJSON = false;
+    }  
+
+   // Если строка их хранища не в формате JSON- 
+   // переходим на начало цикла, пропускаем данное значение
+   if  (isJSON === false) continue;
+      
+      // А если в формате JSON- применяем функцию parse
+    let   userLocalStorage = JSON.parse(userLocalStorage0);
+   
+   // Если уже существует такой пользователь в localStorage- 
      // ставим флаг "не добавлять пользователя"
      if (userLocalStorage.email === User.email) {
         emailExist = true; console.log("email true")
      if (User.password === userLocalStorage.password)  {
-                   passwordTrue = true;  console.log("email true")
+                   passwordTrue = true;  console.log("password true")
           }       
         
         }
